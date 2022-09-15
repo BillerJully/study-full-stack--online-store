@@ -5,7 +5,7 @@ const ApiError = require("../error/ApiError");
 class DeviceController {
   async create(req, res, next) {
     try {
-      const { name, price, brandId, typeId, info } = req.body;
+      const { name, price, BrandId, typeId, info } = req.body;
       const { img } = req.files;
       let fileName = uuiv.v4() + ".jpg";
       img.mv(path.resolve(__dirname, "..", "static", fileName));
@@ -24,32 +24,32 @@ class DeviceController {
     }
   }
   async getAll(req, res) {
-    let { brandId, typeId, limit, page } = req.body;
+    let { BrandId, typeId, limit, page } = req.body;
     page = page || 1;
     limit = limit || 9;
     let offset = page * limit - limit;
 
     let devices;
-    if (!brandId && !typeId) {
+    if (!BrandId && !typeId) {
       devices = await Device.findAndCountAll({ limit, offset });
     }
-    if (brandId && !typeId) {
+    if (BrandId && !typeId) {
       devices = await Device.findAndCountAll({
-        where: { brandId },
+        where: { BrandId },
         limit,
         offset,
       });
     }
-    if (!brandId && typeId) {
+    if (!BrandId && typeId) {
       devices = await Device.findAndCountAlll({
-        where: { TypeId },
+        where: { typeId },
         limit,
         offset,
       });
     }
     if (brandId && typeId) {
       devices = await Device.findAndCountAll({
-        where: { brandId, TypeId },
+        where: { BrandId, typeId },
         limit,
         offset,
       });
